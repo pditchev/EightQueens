@@ -28,8 +28,14 @@ class FigureFactory {
         case Piece::Queen:
             return std::make_shared<Queen>();
             break;
-        case Piece::Rock:
-            return std::make_shared<Rock>();
+        case Piece::Rook:
+            return std::make_shared<Rook>();
+            break;
+        case Piece::Bishop:
+            return std::make_shared<Bishop>();
+            break;
+        case Piece::Knight:
+            return std::make_shared<Knight>();
             break;
         default:
             break;
@@ -88,7 +94,8 @@ public:
     }
 
     void returnPiece(std::shared_ptr<Figure> piece) {
-        if(piece) piecesRepo.back().push(piece);
+        if(piece)
+            piecesRepo.back().push(piece);
     }
 
     bool dropPermutation() {

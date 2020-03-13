@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <stack>
 #include <memory>
 
@@ -17,7 +18,7 @@ struct Board {
 	}
 };
 
-enum class Piece {Queen, Rock};
+enum class Piece {Queen, Rook, Bishop, Knight};
 
 
 class Figure
@@ -40,6 +41,11 @@ protected:
     }
 
 public:
+
+    Figure(std::string name) : name(name) {}
+
+    std::string name;
+
 	bool setFieldsUp(std::pair<int, int> position, Board& instance) {
         if (setAttackedFields(position, instance)) {
             for (auto p : prepared) {
@@ -110,9 +116,12 @@ class Queen : public Figure {
 
         return true;
 	}
+
+public:
+    Queen() : Figure("queen") {}
 };
 
-class Rock : public Figure {
+class Rook : public Figure {
     virtual bool setAttackedFields(std::pair<int, int> position, Board& instance) {
 
         for (size_t row = 0; row < instance.rows; row++)
@@ -128,4 +137,67 @@ class Rock : public Figure {
         }
         return true;
     }
+public:
+    Rook() :Figure("rook") {}
+};
+
+class Bishop : public Figure {
+    virtual bool setAttackedFields(std::pair<int, int> position, Board& instance) {
+        for (int row = position.first + 1, col = position.second + 1;
+            row < instance.rows && col < instance.cols;
+            ++row, ++col) {
+            if (!prep(std::make_pair(row, col), instance)) return false;
+        }
+
+        for (int row = position.first - 1, col = position.second - 1;
+            row >= 0 && col >= 0;
+            --row, --col) {
+            if (!prep(std::make_pair(row, col), instance)) return false;
+        }
+
+        for (int row = position.first + 1, col = position.second - 1;
+            row < instance.rows && col >= 0;
+            ++row, --col) {
+            if (!prep(std::make_pair(row, col), instance)) return false;
+        }
+
+        for (int row = position.first - 1, col = position.second + 1;
+            row >= 0 && col < instance.cols;
+            --row, ++col) {
+            if (!prep(std::make_pair(row, col), instance)) return false;
+        }
+
+        return true;
+    }
+public:
+    Bishop() : Figure("bishop"){} 
+};
+
+class Knight : public Figure {
+
+    static constexpr std::pair<int, int> att[]  {
+        {-2, 1 },
+        {-1, 2 },
+        { 1, 2 },
+        { 2, 1},
+        {2, -1},
+        {1, -2},
+        {-1, -2},
+        {-2, -1}
+    };
+
+    virtual bool setAttackedFields(std::pair<int, int> position, Board& instance) {
+
+        for (auto f : att) {
+            int row = position.first + f.first;
+            int col = position.second + f.second;
+            if (row >= 0 && row < instance.rows && col >= 0 && col < instance.cols) {
+                if (!prep(std::make_pair(row, col), instance)) return false;
+            }
+        }
+        return true;
+    }
+
+public:
+    Knight() : Figure("knight") {}
 };
