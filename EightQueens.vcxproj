@@ -151,21 +151,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bishop.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="FigureFactory.cpp" />
     <ClCompile Include="FundamentalSolutions.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Occupator.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EightQueens.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Queen.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Solution.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bishop.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="Field.h" />
     <ClInclude Include="FundamentalSolutions.h" />
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Occupator.h" />
-    <ClInclude Include="Environment.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="FigureFactory.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="Queen.h" />
+    <ClInclude Include="Rook.h" />
     <ClInclude Include="Solution.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

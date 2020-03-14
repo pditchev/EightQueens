@@ -24,11 +24,6 @@ public:
 		if (this == &other) return true;
 		if (this->size() != other.size()) return false;
 
-		//Solution* temp = const_cast<Solution*>(this);	// nice trick to sort const structures ...
-		//std::sort(temp->begin(), temp->end());
-		//temp= const_cast<Solution*>(&other);
-		//std::sort(temp->begin(), temp->end());
-
 		for (size_t i = 0; i < this->size(); i++)
 		{
 			if (this->at(i).figure->name != other[i].figure->name) return false;
@@ -38,6 +33,7 @@ public:
 		return true;
 	}
 };
+
 
 
 // template specialization of std::hash as needed for std::unordered_set<Solution> !!!

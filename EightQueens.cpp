@@ -7,10 +7,10 @@
 
 int main()
 {
-    std::vector<std::pair<Piece, int>> init{ {Piece::Queen, 6},
+    std::vector<std::pair<Piece, int>> init{ {Piece::Queen, 8},
                                              {Piece::Rook, 0},
-                                             {Piece::Bishop, 1},
-                                             {Piece::Knight, 2}
+                                             {Piece::Bishop, 0},
+                                             {Piece::Knight, 0}
                                             };
 
     Board board(8,8);
