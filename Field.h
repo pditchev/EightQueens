@@ -7,11 +7,11 @@ struct Field {
     int whiteAttacks;
     int blackAttacks;
     Occupied status;
-    bool attemptedAttack;
+    //bool attemptedAttack;
 
     Field() : whiteAttacks(0)
         , blackAttacks(0)
         , status(Occupied::NotOccupied)
-        , attemptedAttack(false)
+        //, attemptedAttack(false)
     {}
 };

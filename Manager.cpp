@@ -2,10 +2,11 @@
 
 bool Manager::setFigure(Occupator& occupator) {  // place a figure on the board
 
-    if (occupator.figure->increaseAttackedState(occupator.position, board)) { // if successfully 
-                                                                    // implemented attack logic
-        board.fields[occupator.position.first][occupator.position.second].status
-            = Occupied::OccupiedByWhite;  // for now working only with white figures!!
+    std::pair<int, int> fromPosition = std::make_pair(occupator.field.row, occupator.field.col);
+
+    if (occupator.figure->increaseAttackedState(fromPosition, board)) { // if successfully 
+                                                                        // implemented attack logic
+        board.at(occupator.field).status = Occupied::OccupiedByWhite;  // for now working only with white figures!!
                                           // to do: implement a switch for different game variants!
         return true;
     }
@@ -13,69 +14,56 @@ bool Manager::setFigure(Occupator& occupator) {  // place a figure on the board
 }
 
 void Manager::cleanFigure(Occupator& occupator) {
+    std::pair<int, int> fromPosition = std::make_pair(occupator.field.row, occupator.field.col);
 
-    occupator.figure->decreaseAttackedState(occupator.position, board);
-    board.fields[occupator.position.first][occupator.position.second].status = Occupied::NotOccupied;
+    occupator.figure->decreaseAttackedState(fromPosition, board);
+    board.at(occupator.field).status = Occupied::NotOccupied;
 }
 
 Manager::Manager(Board& board, FigureFactory& figFactory)
                 : board(board),    figFactory(figFactory) {}
 
-void Manager::place(std::pair<int, int> position) {
-    auto figure = figFactory.getNextPiece();
-    place(figure, position);
+void Manager::start() {
+    if(auto figure = figFactory.getNextPiece())
+        place(figure, FieldPtr(&board)); //start with fields[0][0] (default c'tor of iterator)
 }
 
-void Manager::place(std::shared_ptr<Figure> figure, std::pair<int, int> position) {
+void Manager::place(std::shared_ptr<Figure> figure, FieldPtr passedField) {
 
     static int level = 0;
     ++level;
 
-    int startRow = position.first;
-    int startCol = position.second;
+    for (auto field = passedField; field != board.end(); ++field){
 
-    for (size_t i = startRow; i < board.getRows(); i++)
-    {
-        for (size_t j = 0; j < board.getCols(); j++)
-        {
-            if (i == startRow && j < startCol) continue;
+        Occupator occupator{ figure, field };
 
-            auto pos = std::make_pair(i, j);
-            auto occupator = Occupator(figure, pos);
+        if (   field->status         == Occupied::NotOccupied
+            && field->whiteAttacks   == 0     // change logic
+            && field->blackAttacks   == 0     // for different variants!!!
+            && setFigure(occupator)) {
 
-            if (board.fields[i][j].status == Occupied::NotOccupied
-                && board.fields[i][j].whiteAttacks == 0     // different logic
-                && board.fields[i][j].blackAttacks == 0     // for different variants
-                && setFigure(occupator)) {
+            solution.push_back(occupator);
 
-                solution.push_back(occupator);
+            auto nextFigure = figFactory.getNextPiece();
 
-                auto piece = figFactory.getNextPiece();
-
-                if (!piece) {
-                    distinctSolutions.push_back(solution);
-                    ++count;
-                }
-
-                else place(piece, pos);   // recursion !!
-
-                solution.pop_back();    // rolling back!
-
-                cleanFigure(occupator);
-
-                figFactory.returnPiece(piece);
+            if (!nextFigure) {
+                distinctSolutions.push_back(solution);
+                ++count;
             }
-        }
+
+            else place(nextFigure, field);   // recursion !!
+
+            solution.pop_back();    // rolling back!
+
+            cleanFigure(occupator);
+
+            figFactory.returnPiece(nextFigure);
+        }       
     }
 
     --level;
-    if (level == 0) {
-        if (figFactory.dropPermutation()) {
-            auto nextPiece = figFactory.getNextPiece();
-            if (nextPiece)
-                place(nextPiece, std::make_pair(0, 0)); // recursion!
-        }
-    }
+    if (level == 0 && figFactory.dropPermutation())  start();
+    
 }
 
 int Manager::getCount() {

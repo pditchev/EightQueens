@@ -6,29 +6,42 @@
 struct Occupator
 {
 	std::shared_ptr<Figure> figure;
-	std::pair<int, int> position;
+	//std::pair<int, int> position;
+	Board::iterator field;
 
-	Occupator(std::shared_ptr<Figure> figure, std::pair<int, int> position)
-		: figure(figure), position(position) {}
+	Occupator(std::shared_ptr<Figure> figure, FieldPtr& field)
+		: figure(figure), field(field) {
+	
+		//position.first = field.row;
+		//position.second = field.col;
+	}
 
 
-	bool operator<(Occupator& other) {
-		if (position.first < other.position.first) 
+	//bool operator<(Occupator& other) {
+	//	if (position.first < other.position.first) 
+	//		return true;
+	//	else if (position.first == other.position.first) 
+	//		return position.second < other.position.second;
+	//	return false;
+	//}
+
+	bool operator<(const Occupator& other) const {
+		if (field.row < other.field.row)
 			return true;
-		else if (position.first == other.position.first) 
-			return position.second < other.position.second;
+		else if (field.row == other.field.row)
+			return field.col < other.field.col;
 		return false;
 	}
 
 
-	friend std::ostream& operator<<(std::ostream& out, const Occupator& occupator) {
+	//friend std::ostream& operator<<(std::ostream& out, const Occupator& occupator) {
 
-		out << "(" << occupator.position.first << ", "
-			<< occupator.position.second << ") "
-			<< occupator.figure->name;
+	//	out << "(" << occupator.position.first << ", "
+	//		<< occupator.position.second << ") "
+	//		<< occupator.figure->name;
 
-		return out;
-	}
+	//	return out;
+	//}
 };
 
 template <class T>
@@ -45,8 +58,10 @@ namespace std {
 		size_t operator()(const Occupator& occupator) const {
 			size_t seed = 0;
 			hash_combine(seed, occupator.figure->name);
-			hash_combine(seed, occupator.position.first);
-			hash_combine(seed, occupator.position.second);
+			//hash_combine(seed, occupator.position.first);
+			hash_combine(seed, occupator.field.row);
+
+			hash_combine(seed, occupator.field.col);
 			return seed;
 		}
 	};

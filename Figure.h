@@ -10,6 +10,8 @@ class Figure
 {
 private:
 
+    std::vector<Field*> impacted;
+
 	virtual bool markImpactedFields(std::pair<int, int> position, Board &instance) = 0;
 
 protected:

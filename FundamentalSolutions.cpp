@@ -7,25 +7,48 @@ bool FundamentalSolutions::isUnique(Solution& solution) {
 	return true;
 }
 
+//void FundamentalSolutions::rotate(Solution& solution) {
+//	for (auto& occ : solution) {
+//		size_t temp = occ.position.first;
+//		occ.position.first = occ.position.second;
+//		occ.position.second = board.getRows() - temp - 1;
+//	}
+//	std::sort(solution.begin(), solution.end());
+//}
+
 void FundamentalSolutions::rotate(Solution& solution) {
 	for (auto& occ : solution) {
-		size_t temp = occ.position.first;
-		occ.position.first = occ.position.second;
-		occ.position.second = board.getRows() - temp - 1;
+		size_t temp = occ.field.row;
+		occ.field.row = occ.field.col;
+		occ.field.col = board.getRows() - temp - 1;
 	}
 	std::sort(solution.begin(), solution.end());
 }
+
+//void FundamentalSolutions::flipHorizontally(Solution& solution) {
+//	for (auto& occupator : solution) {
+//		occupator.position.first = board.getCols() - occupator.position.first - 1;
+//	}
+//	std::sort(solution.begin(), solution.end());
+//}
 
 void FundamentalSolutions::flipHorizontally(Solution& solution) {
 	for (auto& occupator : solution) {
-		occupator.position.first = board.getCols() - occupator.position.first - 1;
+		occupator.field.row = board.getCols() - occupator.field.row - 1;
 	}
 	std::sort(solution.begin(), solution.end());
 }
 
+//void FundamentalSolutions::flipVertically(Solution& solution) {
+//	for (auto& occupator : solution) {
+//		occupator.position.second = board.getRows() - occupator.position.second - 1;
+//	}
+//	std::sort(solution.begin(), solution.end());
+//}
+
 void FundamentalSolutions::flipVertically(Solution& solution) {
 	for (auto& occupator : solution) {
-		occupator.position.second = board.getRows() - occupator.position.second - 1;
+		occupator.field.col = board.getRows() - occupator.field.col - 1;
 	}
 	std::sort(solution.begin(), solution.end());
 }

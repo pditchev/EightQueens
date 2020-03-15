@@ -62,6 +62,7 @@ void FigureFactory::permute(int index) {
 FigureFactory::FigureFactory(std::vector<std::pair<Piece, int>> pieces) {
     makeInitial(pieces);
     permute(0);
+    std::cout << "permutations: " << piecesRepo.size() << std::endl;
 }
 
 std::shared_ptr<Figure> FigureFactory::getNextPiece() {

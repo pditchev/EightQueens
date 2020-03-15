@@ -7,8 +7,8 @@
 
 int main()
 {
-    std::vector<std::pair<Piece, int>> init{ {Piece::Queen, 8},
-                                             {Piece::Rook, 0},
+    std::vector<std::pair<Piece, int>> init{ {Piece::Queen,  7},
+                                             {Piece::Rook,   0},
                                              {Piece::Bishop, 0},
                                              {Piece::Knight, 0}
                                             };
@@ -18,7 +18,7 @@ int main()
 
     Manager manager(board, figFactory);
 
-    manager.place(std::make_pair(0,0));
+    manager.start();
 
     auto solutions = manager.getDistinctSolutions();
 

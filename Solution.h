@@ -27,8 +27,8 @@ public:
 		for (size_t i = 0; i < this->size(); i++)
 		{
 			if (this->at(i).figure->name != other[i].figure->name) return false;
-			if (this->at(i).position.first != other[i].position.first) return false;
-			if (this->at(i).position.second != other[i].position.second) return false;
+			if (this->at(i).field.row != other[i].field.row) return false;
+			if (this->at(i).field.col != other[i].field.col) return false;
 		}
 		return true;
 	}

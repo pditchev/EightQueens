@@ -1,6 +1,8 @@
 #pragma once
 #include "Field.h"
 
+
+
 class Board {
 public:
     Field** fields;
@@ -8,21 +10,28 @@ public:
     Board(size_t rows, size_t cols);
 
     struct iterator {
+
+
         Board* board;
         size_t row, col;
 
         iterator(Board* board);
 
-        iterator& operator++();
+        Board::iterator& operator++();
 
         Field& operator*();
 
-        bool operator!=(const iterator& other);
+        Field* operator->();
+
+
+        bool operator!=(const iterator& other) const;
     };
 
     Board::iterator begin();
 
     Board::iterator end();
+
+    Field& at(Board::iterator field);
 
     size_t getRows();
     size_t getCols();
@@ -32,3 +41,4 @@ private:
     size_t cols;
 };
 
+typedef Board::iterator FieldPtr;

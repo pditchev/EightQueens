@@ -24,9 +24,9 @@ public:
 
     Manager(Board& board, FigureFactory& figFactory);
 
-    void place(std::pair<int, int> position);
+    void start();
 
-    void place(std::shared_ptr<Figure> figure, std::pair<int, int> position);
+    void place(std::shared_ptr<Figure> figure, FieldPtr field);
 
     int getCount();
 
