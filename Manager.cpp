@@ -1,6 +1,6 @@
 #include "Manager.h"
 
-bool Manager::setFigure(Occupator& occupator) {  // place a figure on the board
+bool Manager::setFigure(const Occupator& occupator) {  // place a figure on the board
 
     std::pair<int, int> fromPosition = std::make_pair(occupator.field.row, occupator.field.col);
 
@@ -13,7 +13,7 @@ bool Manager::setFigure(Occupator& occupator) {  // place a figure on the board
     return false;
 }
 
-void Manager::cleanFigure(Occupator& occupator) {
+void Manager::cleanFigure(const Occupator& occupator) {
     std::pair<int, int> fromPosition = std::make_pair(occupator.field.row, occupator.field.col);
 
     occupator.figure->decreaseAttackedState(fromPosition, board);
@@ -48,7 +48,6 @@ void Manager::place(std::shared_ptr<Figure> figure, FieldPtr passedField) {
 
             if (!nextFigure) {
                 distinctSolutions.push_back(solution);
-                ++count;
             }
 
             else place(nextFigure, field);   // recursion !!
@@ -66,8 +65,102 @@ void Manager::place(std::shared_ptr<Figure> figure, FieldPtr passedField) {
     
 }
 
-int Manager::getCount() {
-    return count;
+void Manager::startIter() {
+
+    struct SnapShotStruct {
+
+        FieldPtr field;
+        std::shared_ptr<Figure> figure;
+        int stage = 0;
+
+        SnapShotStruct(std::shared_ptr<Figure> figure, FieldPtr passedField)
+            : figure(figure), field(passedField) {}
+
+        SnapShotStruct(const SnapShotStruct& other) : figure(other.figure), field(other.field) {
+            stage = other.stage;
+            field.board = other.field.board;
+            field.row = other.field.row;
+            field.col = other.field.col;
+        }
+
+        SnapShotStruct& operator=(const SnapShotStruct& other) {
+            if (this != &other) {
+                stage = other.stage;
+                figure = other.figure;
+                field.board = other.field.board;
+                field.col = other.field.col;
+                field.row = other.field.row;
+            }
+            return *this;
+        }
+    };
+
+    std::stack<SnapShotStruct> snapshots;
+
+    SnapShotStruct currentSnapShot(nullptr, &board);
+
+    snapshots.push(currentSnapShot);  // starts at [0][0]
+
+    while (!snapshots.empty())
+    {
+        currentSnapShot = snapshots.top();
+        snapshots.pop();
+
+        if (!currentSnapShot.figure) currentSnapShot.figure = figFactory.getNextPiece();
+
+        switch (currentSnapShot.stage) {
+        case 0:
+        {
+            bool found = false;
+            for (auto field = currentSnapShot.field; field != board.end(); ++field) {
+
+                if (field->status == Occupied::NotOccupied
+                    && field->whiteAttacks == 0     // change logic
+                    && field->blackAttacks == 0     // for different variants!!!
+                    && setFigure(Occupator(currentSnapShot.figure, field))) {
+
+                    currentSnapShot.stage = 1;
+                    currentSnapShot.field = field;
+                    snapshots.push(currentSnapShot);
+
+                    solution.push_back(Occupator(currentSnapShot.figure, field));
+
+                    auto nextFigure = figFactory.getNextPiece();
+
+                    if (!nextFigure) {
+                        distinctSolutions.push_back(solution);
+                    }
+                    else {
+                        SnapShotStruct newSnapShot(nextFigure, ++field);
+                        snapshots.push(newSnapShot);
+                    }
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) figFactory.returnPiece(currentSnapShot.figure); 
+
+            break;
+        }
+        case 1:
+
+            solution.pop_back();    // rolling back!
+
+            cleanFigure(Occupator(currentSnapShot.figure, currentSnapShot.field));
+
+            figFactory.returnPiece(currentSnapShot.figure); 
+
+            currentSnapShot.figure = nullptr;
+            ++currentSnapShot.field;
+            currentSnapShot.stage = 0;
+            snapshots.push(currentSnapShot);
+
+            break;
+        }
+
+        if (snapshots.empty() && figFactory.dropPermutation())
+            snapshots.push(SnapShotStruct(nullptr, &board));
+    }
 }
 
 std::vector<Solution> Manager::getDistinctSolutions() {

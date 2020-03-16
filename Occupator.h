@@ -9,7 +9,7 @@ struct Occupator
 	//std::pair<int, int> position;
 	Board::iterator field;
 
-	Occupator(std::shared_ptr<Figure> figure, FieldPtr& field)
+	Occupator(std::shared_ptr<Figure> figure = nullptr, FieldPtr field = nullptr)
 		: figure(figure), field(field) {
 	
 		//position.first = field.row;
@@ -34,14 +34,14 @@ struct Occupator
 	}
 
 
-	//friend std::ostream& operator<<(std::ostream& out, const Occupator& occupator) {
+	friend std::ostream& operator<<(std::ostream& out, const Occupator& occupator) {
 
-	//	out << "(" << occupator.position.first << ", "
-	//		<< occupator.position.second << ") "
-	//		<< occupator.figure->name;
+		out << "(" << occupator.field.row << ", "
+			<< occupator.field.col << ") "
+			<< occupator.figure->name;
 
-	//	return out;
-	//}
+		return out;
+	}
 };
 
 template <class T>
