@@ -33,7 +33,7 @@ size_t Board::getRows() { return rows; }
 
 size_t Board::getCols() { return cols; }
 
-Board::iterator::iterator(Board* board) : board(board), row(0), col(0) {}
+Board::iterator::iterator(Board* board = nullptr) : board(board), row(0), col(0) {}
 
 FieldPtr& Board::iterator::operator++() {
 
@@ -61,4 +61,9 @@ Field* Board::iterator::operator->()
 
 bool Board::iterator::operator!=(const iterator& other) const {
     return row != other.row || col != other.col;
+}
+
+bool Board::iterator::operator==(const iterator& other) const
+{
+    return row == other.row && col == other.col;
 }

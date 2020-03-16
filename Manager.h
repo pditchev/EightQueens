@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <stack>
 #include "Figure.h"
 #include "FigureFactory.h"
 #include "Occupator.h"
@@ -10,15 +11,15 @@
 class Manager {
 
 private:
-    int count =             0;
+
     Board&                  board;
     FigureFactory&          figFactory;
     Solution                solution;
     std::vector<Solution>   distinctSolutions;
 
-    bool setFigure(Occupator& occupator);   // function name may be inappropriate!!!
+    bool setFigure(const Occupator& occupator);   // function name may be inappropriate!!!
 
-    void cleanFigure(Occupator& occupator);
+    void cleanFigure(const Occupator& occupator);
 
 public:
 
@@ -26,9 +27,9 @@ public:
 
     void start();
 
-    void place(std::shared_ptr<Figure> figure, FieldPtr field);
+    void place(std::shared_ptr<Figure> figure, FieldPtr passedField);
 
-    int getCount();
+    void startIter();
 
     std::vector<Solution> getDistinctSolutions();
 };

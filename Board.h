@@ -25,6 +25,8 @@ public:
 
 
         bool operator!=(const iterator& other) const;
+        bool operator==(const iterator& other) const;
+
     };
 
     Board::iterator begin();
