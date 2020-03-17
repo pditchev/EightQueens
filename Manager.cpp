@@ -111,8 +111,12 @@ void Manager::startIter() {
         switch (currentSnapShot.stage) {
         case 0:
         {
-            bool found = false;
-            for (auto field = currentSnapShot.field; field != board.end(); ++field) {
+            for (auto field = currentSnapShot.field; ; ++field) {
+
+                if (field == board.end()) {
+                    figFactory.returnPiece(currentSnapShot.figure);
+                    break;
+                }
 
                 if (field->status == Occupied::NotOccupied
                     && field->whiteAttacks == 0     // change logic
@@ -131,11 +135,9 @@ void Manager::startIter() {
                     else {
                         snapshots.push(SnapShotStruct(nextFigure, ++field));
                     }
-                    found = true;
                     break;
                 }
             }
-            if (!found) figFactory.returnPiece(currentSnapShot.figure); 
 
             break;
         }
@@ -145,7 +147,7 @@ void Manager::startIter() {
 
             cleanFigure(Occupator(currentSnapShot.figure, currentSnapShot.field));
 
-            ++currentSnapShot.field;
+            ++currentSnapShot.field;    // go to the end of the for loop after recuring from "recursion"
             currentSnapShot.stage = 0;
             snapshots.push(currentSnapShot);
 
