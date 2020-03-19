@@ -13,17 +13,20 @@ class WorkHorse {
 private:
 
     Board*                  board;
-    FigureFactory&          figFactory;
+    FigureFactory*          figFactory;
     Solution                solution;
-    std::vector<Solution>   distinctSolutions;
 
     bool setFigure(const Occupator& occupator);   // function name may be inappropriate!!!
 
     void cleanFigure(const Occupator& occupator);
 
 public:
+    std::vector<Solution>   distinctSolutions;
 
-    WorkHorse(std::pair<int, int> boardDimensions, FigureFactory& figFactory);
+    WorkHorse(std::pair<int, int> boardDimensions
+        , std::vector<std::stack<std::shared_ptr<Figure>>> piecesForThread);
+
+    ~WorkHorse();
 
     void start();
 

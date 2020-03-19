@@ -18,7 +18,7 @@ void Initializer::getInput()
 	}
 	boardDimensions.second = cols;
 
-	for (auto i : init) {
+	for (auto& i : init) {
 		auto fig = FigureFactory::produceFigure(i.first);
 		int numberFig = 0;
 		std::cout << "Please, insert number of " << fig->name << "s: ";
@@ -30,6 +30,13 @@ void Initializer::getInput()
 		i.second = numberFig;
 	}
 
+}
+
+void Initializer::prepareInput()
+{
+	makeInitial(init);
+	permute(0);
+	std::cout << "permutations: " << piecesRepo.size() << std::endl;
 }
 
 void Initializer::makeInitial(const std::vector<std::pair<Piece, int>> & pieces) {

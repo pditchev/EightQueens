@@ -24,6 +24,8 @@ struct Initializer
 
 	void getInput();
 
+    void prepareInput();
+
     void makeInitial(const std::vector<std::pair<Piece, int>>& pieces);
 
     void permute(int index);

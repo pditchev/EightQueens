@@ -155,7 +155,9 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="FigureFactory.cpp" />
     <ClCompile Include="FundamentalSolutions.cpp" />
+    <ClCompile Include="Initializer.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Occupator.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EightQueens.cpp" />
@@ -170,7 +172,9 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FundamentalSolutions.h" />
+    <ClInclude Include="Initializer.h" />
     <ClInclude Include="Knight.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Occupator.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="FigureFactory.h" />

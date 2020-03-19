@@ -4,22 +4,25 @@
 #include "WorkHorse.h"
 #include "FundamentalSolutions.h"
 #include "Initializer.h"
+#include "Manager.h"
 
 
 int main()
 {
-    Initializer initializer;
-    initializer.getInput();
 
-    FigureFactory figFactory(initializer);
 
-    WorkHorse workHorse(initializer.boardDimensions, figFactory);
+    //FigureFactory figFactory(initializer);
 
-    workHorse.startIter();
+    //WorkHorse workHorse(initializer.boardDimensions, figFactory);
 
-    auto solutions = workHorse.getDistinctSolutions();
+    //workHorse.startIter();
 
-    FundamentalSolutions fundaments(board, solutions);
+    Manager manager;
+    manager.work();
+
+    auto solutions = manager.getDistinctSolutions();
+
+    FundamentalSolutions fundaments(new Board(std::make_pair(manager.rows(), manager.cols()) ), solutions);
 
 
     std::cout << "size of allSolutions is : " <<  solutions.size() << std::endl;

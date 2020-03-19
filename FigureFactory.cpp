@@ -1,5 +1,7 @@
 #include "FigureFactory.h"
 
+
+
 std::shared_ptr<Figure> FigureFactory::produceFigure(Piece piece) {
 
     switch (piece)
@@ -21,33 +23,31 @@ std::shared_ptr<Figure> FigureFactory::produceFigure(Piece piece) {
     }
 }
 
-FigureFactory::FigureFactory(Initializer& initializer) : initializer(initializer){
-    makeInitial(initializer.init);
-    permute(0);
-    std::cout << "permutations: " << piecesRepo.size() << std::endl;
-}
+FigureFactory::FigureFactory(std::vector<std::stack<std::shared_ptr<Figure>>> piecesForThread)
+    : piecesForThread(piecesForThread){}
+
 
 std::shared_ptr<Figure> FigureFactory::getNextPiece() {
-    if (piecesRepo.back().empty()) {
+    if (piecesForThread.back().empty()) {
         return nullptr;
     }
     else {
-        auto result = piecesRepo.back().top();
-        piecesRepo.back().pop();
+        auto result = piecesForThread.back().top();
+        piecesForThread.back().pop();
         return result;
     }
 }
 
 void FigureFactory::returnPiece(std::shared_ptr<Figure> piece) {
     if (piece)
-        piecesRepo.back().push(piece);
+        piecesForThread.back().push(piece);
 }
 
 bool FigureFactory::dropPermutation() {
 
-    piecesRepo.pop_back();
+    piecesForThread.pop_back();
 
-    if (piecesRepo.empty())
+    if (piecesForThread.empty())
         return false;
     else
         return true;

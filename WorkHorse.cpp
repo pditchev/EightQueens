@@ -20,13 +20,18 @@ void WorkHorse::cleanFigure(const Occupator& occupator) {
     board->at(occupator.field).status = Occupied::NotOccupied;
 }
 
-WorkHorse::WorkHorse(std::pair<int, int> boardDimensions, FigureFactory& figFactory)
-                : figFactory(figFactory) {
-    board = new Board(boardDimensions);
+WorkHorse::WorkHorse(std::pair<int, int> boardDimensions
+                , std::vector<std::stack<std::shared_ptr<Figure>>> piecesForThread)
+                : board(new Board(boardDimensions)), figFactory(new FigureFactory(piecesForThread)) {}
+
+WorkHorse::~WorkHorse()
+{
+    delete board;
+    delete figFactory;
 }
 
 void WorkHorse::start() {
-    if(auto figure = figFactory.getNextPiece())
+    if(auto figure = figFactory->getNextPiece())
         place(figure, FieldPtr(board)); //start with fields[0][0] (default c'tor of iterator)
 }
 
@@ -46,7 +51,7 @@ void WorkHorse::place(std::shared_ptr<Figure> figure, FieldPtr passedField) {
 
             solution.push_back(occupator);
 
-            auto nextFigure = figFactory.getNextPiece();
+            auto nextFigure = figFactory->getNextPiece();
 
             if (!nextFigure) {
                 distinctSolutions.push_back(solution);
@@ -58,12 +63,12 @@ void WorkHorse::place(std::shared_ptr<Figure> figure, FieldPtr passedField) {
 
             cleanFigure(occupator);
 
-            figFactory.returnPiece(nextFigure);
+            figFactory->returnPiece(nextFigure);
         }       
     }
 
     --level;
-    if (level == 0 && figFactory.dropPermutation())  start();
+    if (level == 0 && figFactory->dropPermutation())  start();
     
 }
 
@@ -108,7 +113,7 @@ void WorkHorse::startIter() {
         currentSnapShot = snapshots.top();
         snapshots.pop();
 
-        if (!currentSnapShot.figure) currentSnapShot.figure = figFactory.getNextPiece();
+        if (!currentSnapShot.figure) currentSnapShot.figure = figFactory->getNextPiece();
 
         switch (currentSnapShot.stage) {
         case 0:
@@ -116,7 +121,7 @@ void WorkHorse::startIter() {
             for (auto field = currentSnapShot.field; ; ++field) {
 
                 if (field == board->end()) {
-                    figFactory.returnPiece(currentSnapShot.figure);
+                    figFactory->returnPiece(currentSnapShot.figure);
                     break;
                 }
 
@@ -131,7 +136,7 @@ void WorkHorse::startIter() {
 
                     solution.push_back(Occupator(currentSnapShot.figure, field));    
 
-                    if (auto nextFigure = figFactory.getNextPiece(); !nextFigure) {
+                    if (auto nextFigure = figFactory->getNextPiece(); !nextFigure) {
                         distinctSolutions.push_back(solution);
                     }
                     else {
@@ -156,7 +161,7 @@ void WorkHorse::startIter() {
             break;
         }
 
-        if (snapshots.empty() && figFactory.dropPermutation())
+        if (snapshots.empty() && figFactory->dropPermutation())
             snapshots.push(SnapShotStruct(nullptr, board));
     }
 }
