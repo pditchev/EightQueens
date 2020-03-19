@@ -2,12 +2,22 @@
 
 
 
-Board::Board(size_t rows, size_t cols) : rows(rows), cols(cols) {
+Board::Board(std::pair<int, int> boardDimensions) 
+    : rows(boardDimensions.first), cols(boardDimensions.second) {
     this->fields = new Field * [rows];
     for (int i = 0; i < rows; i++)
     {
         fields[i] = new Field[cols]{};
     }
+}
+
+Board::~Board()
+{
+    for (size_t i = 0; i < rows; i++)
+    {
+        delete[] fields[i];
+    }
+    delete[] fields;
 }
 
 FieldPtr Board::begin() {

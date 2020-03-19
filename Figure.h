@@ -12,11 +12,11 @@ private:
 
     std::vector<Field*> impacted;
 
-	virtual bool markImpactedFields(std::pair<int, int> position, Board &instance) = 0;
+	virtual bool markImpactedFields(std::pair<int, int> position, Board* instance) = 0;
 
 protected:
 
-    bool check(std::pair<int, int> position, Board& instance);
+    bool check(std::pair<int, int> position, Board* instance);
 
 public:
 
@@ -24,7 +24,7 @@ public:
 
     std::string name;
 
-    bool increaseAttackedState(std::pair<int, int> position, Board& board);
+    bool increaseAttackedState(std::pair<int, int> position, Board* board);
 
-    void decreaseAttackedState(std::pair<int, int> position, Board& board);
+    void decreaseAttackedState(std::pair<int, int> position, Board* board);
 };

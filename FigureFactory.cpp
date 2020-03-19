@@ -1,14 +1,5 @@
 #include "FigureFactory.h"
 
-void FigureFactory::makeInitial(std::vector<std::pair<Piece, int>> pieces) {
-    for (auto p : pieces) {
-        for (size_t i = 0; i < p.second; i++)
-        {
-            initial.push_back(p.first);
-        }
-    }
-}
-
 std::shared_ptr<Figure> FigureFactory::produceFigure(Piece piece) {
 
     switch (piece)
@@ -30,37 +21,8 @@ std::shared_ptr<Figure> FigureFactory::produceFigure(Piece piece) {
     }
 }
 
-void FigureFactory::permute(int index) {
-    if (index >= initial.size()) {
-        std::stack<std::shared_ptr<Figure>> help_stack;
-        for (auto p : initial)
-        {
-            //auto fig = produceFigure(p);
-            help_stack.push(produceFigure(p));
-        }
-        piecesRepo.push_back(help_stack);
-    }
-    else {
-
-        std::set<Piece> swapped;
-
-        for (size_t i = index; i < initial.size(); i++)
-        {
-            if (swapped.count(initial[i]))   continue;
-
-            std::swap(initial[index], initial[i]);
-
-            permute(index + 1);
-
-            std::swap(initial[index], initial[i]);
-
-            swapped.insert(initial[i]);
-        }
-    }
-}
-
-FigureFactory::FigureFactory(std::vector<std::pair<Piece, int>> pieces) {
-    makeInitial(pieces);
+FigureFactory::FigureFactory(Initializer& initializer) : initializer(initializer){
+    makeInitial(initializer.init);
     permute(0);
     std::cout << "permutations: " << piecesRepo.size() << std::endl;
 }

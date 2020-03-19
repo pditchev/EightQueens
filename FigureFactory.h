@@ -9,25 +9,23 @@
 #include "Rook.h"
 #include "Bishop.h"
 #include "Knight.h"
+#include "Initializer.h"
 
 enum class Piece { Queen, Rook, Bishop, Knight };
 
 class FigureFactory {
 
 private:
-    std::vector<Piece> initial;
 
-    std::vector<std::stack<std::shared_ptr<Figure>>> piecesRepo;
+    Initializer& initializer;
 
-    void makeInitial(std::vector<std::pair<Piece, int>> pieces);
 
-    std::shared_ptr<Figure> produceFigure(Piece piece);
-
-    void permute(int index);
 
 
 public:
-    FigureFactory(std::vector<std::pair<Piece, int>> pieces);
+    static std::shared_ptr<Figure> produceFigure(Piece piece);
+
+    FigureFactory(Initializer& initializer);
 
     std::shared_ptr<Figure> getNextPiece();
 

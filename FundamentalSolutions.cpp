@@ -20,7 +20,7 @@ void FundamentalSolutions::rotate(Solution& solution) {
 	for (auto& occ : solution) {
 		size_t temp = occ.field.row;
 		occ.field.row = occ.field.col;
-		occ.field.col = board.getRows() - temp - 1;
+		occ.field.col = board->getRows() - temp - 1;
 	}
 	std::sort(solution.begin(), solution.end());
 }
@@ -34,7 +34,7 @@ void FundamentalSolutions::rotate(Solution& solution) {
 
 void FundamentalSolutions::flipHorizontally(Solution& solution) {
 	for (auto& occupator : solution) {
-		occupator.field.row = board.getCols() - occupator.field.row - 1;
+		occupator.field.row = board->getCols() - occupator.field.row - 1;
 	}
 	std::sort(solution.begin(), solution.end());
 }
@@ -48,7 +48,7 @@ void FundamentalSolutions::flipHorizontally(Solution& solution) {
 
 void FundamentalSolutions::flipVertically(Solution& solution) {
 	for (auto& occupator : solution) {
-		occupator.field.col = board.getRows() - occupator.field.col - 1;
+		occupator.field.col = board->getRows() - occupator.field.col - 1;
 	}
 	std::sort(solution.begin(), solution.end());
 }
@@ -79,7 +79,7 @@ void FundamentalSolutions::buildFundamentals(std::vector<Solution>& distincts) {
 	}
 }
 
-FundamentalSolutions::FundamentalSolutions(Board& board, std::vector<Solution>& distincts)
+FundamentalSolutions::FundamentalSolutions(Board* board, std::vector<Solution>& distincts)
 	: distincts(distincts), board(board) {
 
 	buildFundamentals(distincts);

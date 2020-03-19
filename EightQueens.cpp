@@ -1,26 +1,23 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "Manager.h"
+#include "WorkHorse.h"
 #include "FundamentalSolutions.h"
+#include "Initializer.h"
 
 
 int main()
 {
-    std::vector<std::pair<Piece, int>> init{ {Piece::Queen,  6},
-                                             {Piece::Rook,   0},
-                                             {Piece::Bishop, 1},
-                                             {Piece::Knight, 2}
-                                            };
+    Initializer initializer;
+    initializer.getInput();
 
-    Board board(8,8);
-    FigureFactory figFactory(init);
+    FigureFactory figFactory(initializer);
 
-    Manager manager(board, figFactory);
+    WorkHorse workHorse(initializer.boardDimensions, figFactory);
 
-    manager.startIter();
+    workHorse.startIter();
 
-    auto solutions = manager.getDistinctSolutions();
+    auto solutions = workHorse.getDistinctSolutions();
 
     FundamentalSolutions fundaments(board, solutions);
 

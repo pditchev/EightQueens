@@ -1,4 +1,5 @@
 #pragma once
+#include <utility>
 #include "Field.h"
 
 
@@ -7,7 +8,9 @@ class Board {
 public:
     Field** fields;
 
-    Board(size_t rows, size_t cols);
+    Board(std::pair<int, int> boardDimensions);
+
+    ~Board();
 
     struct iterator {
 

@@ -160,7 +160,7 @@
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EightQueens.cpp" />
     <ClCompile Include="Figure.cpp" />
-    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="WorkHorse.cpp" />
     <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Solution.cpp" />
@@ -174,7 +174,7 @@
     <ClInclude Include="Occupator.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="FigureFactory.h" />
-    <ClInclude Include="Manager.h" />
+    <ClInclude Include="WorkHorse.h" />
     <ClInclude Include="Queen.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Solution.h" />

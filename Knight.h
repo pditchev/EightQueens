@@ -14,7 +14,7 @@ class Knight : public Figure {
         {-2, -1}
     };
 
-    virtual bool markImpactedFields(std::pair<int, int> position, Board& instance) override;
+    virtual bool markImpactedFields(std::pair<int, int> position, Board* instance) override;
 
 public:
     Knight();

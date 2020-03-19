@@ -1,8 +1,8 @@
 #include "Figure.h"
 
-bool Figure::check(std::pair<int, int> position, Board& instance)
+bool Figure::check(std::pair<int, int> position, Board* instance)
 {
-    Field& field = instance.fields[position.first][position.second]; // for simplicity!!
+    Field& field = instance->fields[position.first][position.second]; // for simplicity!!
 
     if (field.status == Occupied::NotOccupied)
     {
@@ -21,7 +21,7 @@ Figure::Figure(std::string name) : name(name) {
     //impacted.reserve(32);
 }
 
-bool Figure::increaseAttackedState(std::pair<int, int> position, Board& board) {
+bool Figure::increaseAttackedState(std::pair<int, int> position, Board* board) {
 
     if (markImpactedFields(position, board)) {
         for (auto& field : impacted) {
@@ -46,7 +46,7 @@ bool Figure::increaseAttackedState(std::pair<int, int> position, Board& board) {
     //return success;
 }
 
-void Figure::decreaseAttackedState(std::pair<int, int> position, Board& board) {
+void Figure::decreaseAttackedState(std::pair<int, int> position, Board* board) {
     markImpactedFields(position, board);
     for (auto& field : impacted) {
     //for (auto& field : board) {

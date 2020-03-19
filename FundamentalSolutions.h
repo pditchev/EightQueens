@@ -7,7 +7,7 @@
 class FundamentalSolutions
 {
 private:
-	Board& board;
+	Board* board;
 	std::vector<Solution>& distincts;
 	std::unordered_set<Solution> fundamentals;
 
@@ -25,7 +25,7 @@ private:
 
 public:
 
-	FundamentalSolutions(Board& board, std::vector<Solution>& distincts);
+	FundamentalSolutions(Board* board, std::vector<Solution>& distincts);
 
 	int getFundamentalSolutions();
 };
